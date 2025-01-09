@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,6 +103,27 @@ public class EmployeeServiceTest {
         // then - verify the output
         Assertions.assertThat(employees).isNotNull();
         Assertions.assertThat(employees.size()).isEqualTo(2);
+    }
+
+
+    @DisplayName("JUnit test for getAllEmployees method (negative scenario)")
+    @Test
+    public void givenEmptyEmployeesList_whenGetAllEmployees_thenReturnEmptyEmployeeList(){
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .id(1L)
+                .firstName("Leuel")
+                .lastName("Leuel")
+                .email("leuel@gmail.com")
+                .build();
+
+        given(employeeRepository.findAll()).willReturn(Collections.emptyList());
+        // when - action or the behavior that we are going to test
+        List<Employee> employees = employeeService.getAllEmployees();
+
+        // then - verify the output
+        Assertions.assertThat(employees).isEmpty();
+        Assertions.assertThat(employees.size()).isEqualTo(0);
     }
 
 }
