@@ -4,7 +4,7 @@ import net.javaguides.springboottesting.exception.ResourceNotFoundException;
 import net.javaguides.springboottesting.model.Employee;
 import net.javaguides.springboottesting.repository.EmployeeRepository;
 import net.javaguides.springboottesting.service.impl.EmployeeServiceImpl;
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.hibernate.query.sqm.mutation.internal.cte.CteInsertStrategy;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,8 +63,8 @@ public class EmployeeServiceTest {
         Employee savedEmployee = employeeService.saveEmployee(employee);
 
         // then - verify the output
-        Assertions.assertThat(savedEmployee.getId()).isEqualTo(employee.getId());
-        Assertions.assertThat(savedEmployee).isNotNull();
+        assertThat(savedEmployee.getId()).isEqualTo(employee.getId());
+        assertThat(savedEmployee).isNotNull();
 
     }
 
@@ -101,8 +101,8 @@ public class EmployeeServiceTest {
         List<Employee> employees = employeeService.getAllEmployees();
 
         // then - verify the output
-        Assertions.assertThat(employees).isNotNull();
-        Assertions.assertThat(employees.size()).isEqualTo(2);
+        assertThat(employees).isNotNull();
+        assertThat(employees.size()).isEqualTo(2);
     }
 
 
@@ -122,8 +122,8 @@ public class EmployeeServiceTest {
         List<Employee> employees = employeeService.getAllEmployees();
 
         // then - verify the output
-        Assertions.assertThat(employees).isEmpty();
-        Assertions.assertThat(employees.size()).isEqualTo(0);
+        assertThat(employees).isEmpty();
+        assertThat(employees.size()).isEqualTo(0);
     }
 
     @DisplayName("JUnit test for getEmployeeById method")
@@ -137,8 +137,8 @@ public class EmployeeServiceTest {
         Optional<Employee> savedEmployee = employeeService.getEmployeeById(employee.getId());
         // then
 
-        Assertions.assertThat(savedEmployee).isNotNull();
-        Assertions.assertThat(savedEmployee.get().getId()).isEqualTo(employee.getId());
+        assertThat(savedEmployee).isNotNull();
+        assertThat(savedEmployee.get().getId()).isEqualTo(employee.getId());
     }
 
 }
