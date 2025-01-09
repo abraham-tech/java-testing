@@ -126,4 +126,19 @@ public class EmployeeServiceTest {
         Assertions.assertThat(employees.size()).isEqualTo(0);
     }
 
+    @DisplayName("JUnit test for getEmployeeById method")
+    @Test
+    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployee(){
+        // given
+        given(employeeRepository.findById(1L)).willReturn(Optional.of(employee));
+
+        // when
+
+        Optional<Employee> savedEmployee = employeeService.getEmployeeById(employee.getId());
+        // then
+
+        Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.get().getId()).isEqualTo(employee.getId());
+    }
+
 }
