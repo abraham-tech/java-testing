@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 //@SpringBootTest
@@ -81,7 +82,26 @@ public class EmployeeServiceTest {
         // then - verify the output
         verify(employeeRepository, never()).save(any(Employee.class));
 
+    }
 
+    @DisplayName("JUnit test for getAllEmployees method")
+    @Test
+    public void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeeList(){
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .id(1L)
+                .firstName("Leuel")
+                .lastName("Leuel")
+                .email("leuel@gmail.com")
+                .build();
+
+        given(employeeRepository.findAll()).willReturn(List.of(employee, employee1));
+        // when - action or the behavior that we are going to test
+        List<Employee> employees = employeeService.getAllEmployees();
+
+        // then - verify the output
+        Assertions.assertThat(employees).isNotNull();
+        Assertions.assertThat(employees.size()).isEqualTo(2);
     }
 
 }
