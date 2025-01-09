@@ -8,21 +8,29 @@ import org.hibernate.query.sqm.mutation.internal.cte.CteInsertStrategy;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 @SpringBootTest
+//@ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
+    @Mock
     private EmployeeRepository employeeRepository;
-    private EmployeeService employeeService;
+
+    @InjectMocks
+    private EmployeeServiceImpl employeeService;
 
     @BeforeEach
     public void setUp() {
-        employeeRepository = Mockito.mock(EmployeeRepository.class);
-        employeeService = new EmployeeServiceImpl(employeeRepository);
+//        employeeRepository = Mockito.mock(EmployeeRepository.class);
+//        employeeService = new EmployeeServiceImpl(employeeRepository);
     }
 
     // JUnit test for save Emplopyee method
