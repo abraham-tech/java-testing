@@ -141,4 +141,22 @@ public class EmployeeServiceTest {
         assertThat(savedEmployee.get().getId()).isEqualTo(employee.getId());
     }
 
+    @DisplayName("JUnit for updateEmployee method")
+    @Test
+    public void givenEmployee_whenUpdateEmployee_thenReturnEmployeeObject(){
+        // given
+        given(employeeRepository.save(employee)).willReturn(employee);
+        employee.setEmail("John@gmail.com");
+        employee.setFirstName("John");
+        employee.setLastName("Doe");
+
+        // when
+        Employee updatedEmployee = employeeService.updateEmployee(employee);
+
+        // then
+        assertThat(updatedEmployee.getId()).isEqualTo(employee.getId());
+        assertThat(updatedEmployee.getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(updatedEmployee.getLastName()).isEqualTo(employee.getLastName());
+    }
+
 }
