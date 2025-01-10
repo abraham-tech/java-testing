@@ -129,4 +129,66 @@ public class EmployeeControllerTests {
                 .andDo(print());
 
     }
+
+    @Test
+    public void givenUpdateEmployee_whenUpdateEmployee_thenReturnEmployee() throws Exception {
+        // give
+        long employeeId = 1L;
+        Employee savedEmployee = Employee.builder()
+                .firstName("Abraham")
+                .lastName("Meja")
+                .email("meja@gmail.com")
+                .build();
+
+        Employee updatedEmployee = Employee.builder()
+                .firstName("Updated Abraham")
+                .lastName("Updated Meja")
+                .email("updatedMeja@gmail.com")
+                .build();
+
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.of(savedEmployee));
+        given(employeeService.updateEmployee(any(Employee.class)))
+                .willAnswer(invocation -> invocation.getArgument(0));
+        // when
+        ResultActions response = mockMvc.perform(put("/api/v1/employees/" + employeeId)
+        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedEmployee))
+        );
+
+        // then
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Updated Abraham"))
+                .andExpect(jsonPath("$.lastName").value("Updated Meja"))
+                .andExpect(jsonPath("$.email").value("updatedMeja@gmail.com"));
+    }
+
+    @Test
+    public void givenUpdateEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
+        // give
+        long employeeId = 1L;
+        Employee savedEmployee = Employee.builder()
+                .firstName("Abraham")
+                .lastName("Meja")
+                .email("meja@gmail.com")
+                .build();
+
+        Employee updatedEmployee = Employee.builder()
+                .firstName("Updated Abraham")
+                .lastName("Updated Meja")
+                .email("updatedMeja@gmail.com")
+                .build();
+
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.empty());
+        given(employeeService.updateEmployee(any(Employee.class)))
+                .willAnswer(invocation -> invocation.getArgument(0));
+        // when
+        ResultActions response = mockMvc.perform(put("/api/v1/employees/" + employeeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmployee))
+        );
+
+        // then
+        response.andExpect(status().isNotFound());
+    }
 }
