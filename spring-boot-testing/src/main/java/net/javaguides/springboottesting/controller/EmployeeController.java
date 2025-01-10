@@ -33,4 +33,19 @@ public class EmployeeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Employee> updateEmployee(
+            @PathVariable("id") Long id, @RequestBody Employee employee) {
+        return employeeService.getEmployeeById(id)
+                .map(savedEmployee -> {
+                    savedEmployee.setFirstName(employee.getFirstName());
+                    savedEmployee.setLastName(employee.getLastName());
+                    savedEmployee.setEmail(employee.getEmail());
+
+                    Employee updatedEmployee = employeeService.updateEmployee(savedEmployee);
+                    return ResponseEntity.ok(updatedEmployee);
+                }).orElse(ResponseEntity.notFound().build());
+
+    }
+
 }
