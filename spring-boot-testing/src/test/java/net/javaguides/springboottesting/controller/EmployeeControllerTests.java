@@ -85,7 +85,7 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    public void givenEmployee_whenGetEmployeeById_thenReturnEmployee() throws Exception {
+    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployee() throws Exception {
         // give
         long employeeId = 1L;
         Employee employee = Employee.builder()
@@ -95,7 +95,7 @@ public class EmployeeControllerTests {
                 .email("abraham@gmail.com")
                 .build();
 
-        given(employeeService.getEmployeeById(1L)).willReturn(Optional.of(employee));
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.of(employee));
 
         // when
         ResultActions response = mockMvc.perform(get("/api/v1/employees/" + employeeId));
@@ -106,5 +106,27 @@ public class EmployeeControllerTests {
                 .andExpect(jsonPath("$.firstName").value("Abraham"))
                 .andExpect(jsonPath("$.lastName").value("Meja"))
                 .andExpect(jsonPath("$.email").value("abraham@gmail.com"));
+    }
+
+    @Test
+    public void givenInvalidEmployeeId_whenGetEmployeeById_thenReturnEmpty() throws Exception {
+        // give
+        long employeeId = 1L;
+        Employee employee = Employee.builder()
+                .id(employeeId)
+                .firstName("Abraham")
+                .lastName("Meja")
+                .email("abraham@gmail.com")
+                .build();
+
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.empty());
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/v1/employees/" + employeeId));
+
+        // then
+        response.andExpect(status().isNotFound())
+                .andDo(print());
+
     }
 }
