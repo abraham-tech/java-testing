@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -81,5 +82,29 @@ public class EmployeeControllerTests {
                 .andExpect(
                         jsonPath("$.size()",
                                 CoreMatchers.is(listOfEmployees.size())));
+    }
+
+    @Test
+    public void givenEmployee_whenGetEmployeeById_thenReturnEmployee() throws Exception {
+        // give
+        long employeeId = 1L;
+        Employee employee = Employee.builder()
+                .id(employeeId)
+                .firstName("Abraham")
+                .lastName("Meja")
+                .email("abraham@gmail.com")
+                .build();
+
+        given(employeeService.getEmployeeById(1L)).willReturn(Optional.of(employee));
+
+        // when
+        ResultActions response = mockMvc.perform(get("/api/v1/employees/" + employeeId));
+
+        // then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.firstName").value("Abraham"))
+                .andExpect(jsonPath("$.lastName").value("Meja"))
+                .andExpect(jsonPath("$.email").value("abraham@gmail.com"));
     }
 }
