@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.javaguides.springboottesting.model.Employee;
 import net.javaguides.springboottesting.service.EmployeeService;
 import net.javaguides.springboottesting.service.impl.EmployeeServiceImpl;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
@@ -20,6 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -58,5 +62,24 @@ public class EmployeeControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Abraham"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Meja"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("abraham@gmail.com"));
+    }
+
+    @Test
+    public void givenListOfEmployee_whenGetAllEmployees_thenReturnEmployeeList() throws Exception {
+        // given - precondition or set up
+        List<Employee> listOfEmployees = new ArrayList<>();
+        listOfEmployees.add(Employee.builder().firstName("Abraham").lastName("Meja").email("abraham@gmail.com").build());
+        listOfEmployees.add(Employee.builder().firstName("Abel").lastName("Meja").email("abel@gmail.com").build());
+
+        BDDMockito.given(employeeService.getAllEmployees()).willReturn(listOfEmployees);
+        // when
+        ResultActions response = mockMvc.perform(get("/api/v1/employees"));
+
+        // then
+        response.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(
+                        MockMvcResultMatchers.jsonPath("$.size()",
+                                CoreMatchers.is(listOfEmployees.size())));
     }
 }
