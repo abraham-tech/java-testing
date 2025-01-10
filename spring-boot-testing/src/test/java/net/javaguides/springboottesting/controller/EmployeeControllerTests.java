@@ -6,8 +6,8 @@ import net.javaguides.springboottesting.service.EmployeeService;
 import net.javaguides.springboottesting.service.impl.EmployeeServiceImpl;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class EmployeeControllerTests {
                 .email("abraham@gmail.com")
                 .build();
 
-        BDDMockito.given(employeeService.saveEmployee(ArgumentMatchers.any(Employee.class)))
+        given(employeeService.saveEmployee(any(Employee.class)))
                 .willAnswer((invocation) -> invocation.getArgument(0));
 
         // when
@@ -57,11 +57,11 @@ public class EmployeeControllerTests {
         );
 
         // then
-        response.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Abraham"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Meja"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("abraham@gmail.com"));
+        response.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName").value("Abraham"))
+                .andExpect(jsonPath("$.lastName").value("Meja"))
+                .andExpect(jsonPath("$.email").value("abraham@gmail.com"));
     }
 
     @Test
@@ -71,15 +71,15 @@ public class EmployeeControllerTests {
         listOfEmployees.add(Employee.builder().firstName("Abraham").lastName("Meja").email("abraham@gmail.com").build());
         listOfEmployees.add(Employee.builder().firstName("Abel").lastName("Meja").email("abel@gmail.com").build());
 
-        BDDMockito.given(employeeService.getAllEmployees()).willReturn(listOfEmployees);
+        given(employeeService.getAllEmployees()).willReturn(listOfEmployees);
         // when
         ResultActions response = mockMvc.perform(get("/api/v1/employees"));
 
         // then
-        response.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        response.andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(
-                        MockMvcResultMatchers.jsonPath("$.size()",
+                        jsonPath("$.size()",
                                 CoreMatchers.is(listOfEmployees.size())));
     }
 }
