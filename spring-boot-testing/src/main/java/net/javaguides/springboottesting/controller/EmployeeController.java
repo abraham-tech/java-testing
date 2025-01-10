@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.javaguides.springboottesting.model.Employee;
 import net.javaguides.springboottesting.service.EmployeeService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,13 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable("id") Long id) {
+        return employeeService.getEmployeeById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
