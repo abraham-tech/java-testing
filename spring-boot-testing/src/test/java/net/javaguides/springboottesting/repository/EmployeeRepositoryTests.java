@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
-public class EmployeeRepositoryTests {
+public class EmployeeRepositoryTests extends AbstractionBaseTest{
     @Autowired
     private EmployeeRepository employeeRepository;
     private Employee employee;
