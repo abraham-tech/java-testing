@@ -30,31 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Testcontainers
-public class EmployeeControllerIT {
-
-
-    // will be shared between test methods
-    @Container
-    private static final MySQLContainer MY_SQL_CONTAINER = new MySQLContainer("mysql:latest")
-            .withUsername("username")
-            .withPassword("password")
-            .withDatabaseName("ems");
-
-
-    @DynamicPropertySource
-    public static void dynamicPropertySource(DynamicPropertyRegistry registry){
-        registry.add("spring.datasource.url", MY_SQL_CONTAINER::getJdbcUrl);
-        registry.add("spring.datasource.username", MY_SQL_CONTAINER::getUsername);
-        registry.add("spring.datasource.password", MY_SQL_CONTAINER::getPassword);
-    }
-
-
-
-//    @Container
-//    private static MySQLContainer mysqlContainer = new MySQLContainer("mysql:latest")
-//            .withDatabaseName("ems")
-//            .withUsername("root")
-//            .withPassword("root");
+public class EmployeeControllerIT extends AbstractContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
